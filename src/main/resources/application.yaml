@@ -1,0 +1,17 @@
+spring:
+
+  datasource:
+    url: jdbc:h2:mem:ricknmorty
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true  # Ativa o console web do H2
+      path: /h2-console  # Define o caminho para acessar o console (http://localhost:8080/h2-console)
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # Cria ou atualiza o schema do banco conforme as entidades
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true  # Exibe as queries SQL no log
+    defer-datasource-initialization: true
