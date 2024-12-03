@@ -4,6 +4,7 @@ package com.acme.rmbackend.service;
 import com.acme.rmbackend.model.Personagem;
 import com.acme.rmbackend.repository.CharacterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +17,11 @@ public class CharacterService {
         return characterRepository.save(character);
     }
 
-    public List<Personagem> getAllCharacters() {
-        return characterRepository.findAll().subList(0, 50);
+    public List<Personagem> getAllCharacters(int page, int size){
+        return characterRepository.findAll(PageRequest.of(page, size)).stream().toList();
+    }
+    public long count(){
+        return characterRepository.count();
     }
 
     public Optional<Personagem> getCharacterById(Long id) {

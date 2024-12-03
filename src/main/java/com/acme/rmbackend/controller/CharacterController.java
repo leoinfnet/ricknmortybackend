@@ -3,6 +3,10 @@ package com.acme.rmbackend.controller;
 import com.acme.rmbackend.model.Personagem;
 import com.acme.rmbackend.service.CharacterService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/api/characters")
-@RestController
+@RestController@Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")  // Liberando CORS para todos os métodos deste controlador
+@CrossOrigin(origins = "*",allowedHeaders = "*",exposedHeaders = "*")  // Liberando CORS para todos os métodos deste controlador
 public class CharacterController {
     private final CharacterService characterService;
 
@@ -26,8 +30,13 @@ public class CharacterController {
 
     // Buscar todos os personagens
     @GetMapping
-    public List<Personagem> getAllCharacters() {
-        return characterService.getAllCharacters();
+    public ResponseEntity<?> getAllCharacters(@RequestHeader(value = "page", defaultValue = "0") String page, @RequestHeader(value = "size", defaultValue = "10") String size) {
+        log.info("page: " + page + " size: " + size);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(characterService.count()));
+        List<Personagem> allCharacters = characterService.getAllCharacters(Integer.parseInt(page), Integer.parseInt(size));
+        return new ResponseEntity<>(allCharacters, headers, HttpStatus.OK);
+
     }
 
     // Buscar personagem por ID
