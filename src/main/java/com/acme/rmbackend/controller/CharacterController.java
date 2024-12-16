@@ -1,16 +1,20 @@
 package com.acme.rmbackend.controller;
 
 import com.acme.rmbackend.model.Personagem;
+import com.acme.rmbackend.payload.CriteriaRequest;
 import com.acme.rmbackend.service.CharacterService;
+import com.acme.rmbackend.service.CsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +24,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*",allowedHeaders = "*",exposedHeaders = "*")  // Liberando CORS para todos os métodos deste controlador
 public class CharacterController {
     private final CharacterService characterService;
-
+    private final CsvService csvService;
     // Criar ou atualizar um personagem
     @PostMapping
     public ResponseEntity<Personagem> createOrUpdateCharacter(@RequestBody Personagem character) {
@@ -64,5 +68,25 @@ public class CharacterController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Personagem>> buscarPersonagens(
+            @RequestHeader(value = "nome", required = false) Optional<String> nome,
+            @RequestHeader(value = "land", required = false) Optional<String> origin,
+            @RequestHeader(value = "status", required = false) Optional<String> status) {
+
+        CriteriaRequest criteriaRequest = new CriteriaRequest(nome, origin,status);
+        List<Personagem> search = characterService.search(criteriaRequest);
+        return ResponseEntity.ok(search);
+    }
+    @GetMapping("/export-chars")
+    public ResponseEntity<FileSystemResource> exportCharacters() {
+        String filePath = "chars.csv";
+        csvService.generate(filePath);
+        File file = new File(filePath);
+        FileSystemResource fileSystemResource = new FileSystemResource(file);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + file.getName())
+                .body(fileSystemResource);
     }
 }
