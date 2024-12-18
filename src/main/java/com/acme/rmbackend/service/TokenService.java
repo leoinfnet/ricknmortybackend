@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TokenService {
@@ -22,6 +23,7 @@ public class TokenService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC))
                 .withClaim("email", usuario.getEmail())
+                .withClaim("roles", List.of("ADMIN", "ROOT"))
                 .sign(algorithm);
     }
     public DecodedJWT isValid(String token) {

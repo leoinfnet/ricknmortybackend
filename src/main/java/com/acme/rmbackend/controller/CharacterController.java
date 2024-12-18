@@ -34,13 +34,13 @@ public class CharacterController {
 
     // Buscar todos os personagens
     @GetMapping
-    public ResponseEntity<?> getAllCharacters(@RequestHeader(value = "page", defaultValue = "0") String page, @RequestHeader(value = "size", defaultValue = "10") String size) {
+    public ResponseEntity<?> getAllCharacters(@RequestHeader(value = "page", defaultValue = "0") String page,
+                                              @RequestHeader(value = "size", defaultValue = "10") String size) {
         log.info("page: " + page + " size: " + size);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(characterService.count()));
         List<Personagem> allCharacters = characterService.getAllCharacters(Integer.parseInt(page), Integer.parseInt(size));
         return new ResponseEntity<>(allCharacters, headers, HttpStatus.OK);
-
     }
 
     // Buscar personagem por ID
