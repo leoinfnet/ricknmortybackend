@@ -1,5 +1,14 @@
 spring:
-
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2s
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   datasource:
     url: jdbc:postgresql://localhost:5432/rickmorty
     username: postgres
