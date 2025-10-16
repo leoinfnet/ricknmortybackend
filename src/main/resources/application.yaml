@@ -1,17 +1,23 @@
 spring:
 
   datasource:
-    url: jdbc:h2:mem:ricknmorty
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true  # Ativa o console web do H2
-      path: /h2-console  # Define o caminho para acessar o console (http://localhost:8080/h2-console)
+    url: jdbc:postgresql://localhost:5432/rickmorty
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+#  h2:
+#    console:
+#      enabled: true  # Ativa o console web do H2
+#      path: /h2-console  # Define o caminho para acessar o console (http://localhost:8080/h2-console)
   jpa:
     hibernate:
-      ddl-auto: create-drop  # Cria ou atualiza o schema do banco conforme as entidades
-    database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true  # Exibe as queries SQL no log
-    defer-datasource-initialization: true
+      ddl-auto: none   # usa o schema já criado no container (não recria)
+    show-sql: true         # loga queries no console
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: America/Sao_Paulo
+  sql:
+    init:
+      mode: never
