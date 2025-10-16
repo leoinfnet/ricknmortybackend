@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Personagem implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // ID do personagem (chave primária)
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;  // Nome do personagem
