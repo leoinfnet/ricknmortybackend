@@ -1,0 +1,49 @@
+volumes:
+  pg_data:
+networks:
+  backend:
+    driver: bridge
+services:
+  redis:
+    image: redis
+    container_name: cache-server
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+  db:
+    image: rickmorty-db
+    container_name: banco-server
+    environment:
+      POSTGRES_SENHA_NOVA: ${POSTGRES_NOVA_SENHA}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/list/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+  app:
+    image: rickmorty-app
+    container_name: app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 1s
+      retries: 10
+      start_period: 20s
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
+
+

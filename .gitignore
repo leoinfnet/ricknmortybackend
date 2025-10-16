@@ -1,6 +1,7 @@
 HELP.md
 target/
 docker/*.jar
+docker/app/*.jar
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

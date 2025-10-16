@@ -13,7 +13,7 @@ services:
   app:
     build:
       context: ./app
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.multi.bkp
     image: demo/app:latest
     container_name: app
     depends_on:
