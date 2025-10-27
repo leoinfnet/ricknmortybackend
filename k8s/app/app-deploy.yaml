@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: rick
+  name: app-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rick-app
+  template:
+    metadata:
+      name: rick-app
+      labels:
+        app: rick-app
+    spec:
+      containers:
+        - name: rick-app
+          image: leogloriainfnet/rickmorty-app:latest
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5

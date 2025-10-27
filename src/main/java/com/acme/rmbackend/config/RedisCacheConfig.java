@@ -26,6 +26,7 @@ public class RedisCacheConfig {
                 .entryTtl(Duration.ofMinutes(10))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
     }
+    //Este um comentario
 
     @Bean
     RedisCacheManagerBuilderCustomizer rankingCacheTTL() {

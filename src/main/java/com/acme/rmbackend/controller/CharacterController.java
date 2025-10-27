@@ -25,7 +25,6 @@ import java.util.Optional;
 public class CharacterController {
     private final CharacterService characterService;
     private final CsvService csvService;
-    // Criar ou atualizar um personagem
     @PostMapping
     public ResponseEntity<Personagem> createOrUpdateCharacter(@RequestBody Personagem character) {
         Personagem savedPersonagem = characterService.saveCharacter(character);

@@ -1,25 +1,23 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   cache:
     type: redis
   data:
     redis:
-      host: 10.1.0.57
-      #host: localhost
+      host: 10.109.20.118
       port: 6379
       timeout: 2s
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   datasource:
-    url: jdbc:postgresql://banco-server:5432/rickmorty
+    url: jdbc:postgresql://10.104.184.52:5432/rickmorty
     #url: jdbc:postgresql://localhost:5432/rickmorty
     username: postgres
     password: 123456
     driver-class-name: org.postgresql.Driver
-#  h2:
-#    console:
-#      enabled: true  # Ativa o console web do H2
-#      path: /h2-console  # Define o caminho para acessar o console (http://localhost:8080/h2-console)
+
   jpa:
     hibernate:
       ddl-auto: none   # usa o schema já criado no container (não recria)
